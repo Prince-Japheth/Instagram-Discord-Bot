@@ -227,7 +227,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 </head>
 <body>
   <div class="sigil-frame">
-    <div class="sub-title">Game of Thrones &bull; House of the Dragon</div>
+    <div class="sub-title">Game of Thrones &bull; House of the Dragon &bull; Westeros</div>
     <h1>Instagram Feed Monitor</h1>
     <div class="divider"></div>
     <p>Automated feed monitor broadcasting new posts to your Discord channel. Use the button below to perform a manual check.</p>
@@ -241,6 +241,14 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       <div class="ledger-item">
         <span class="house-name">Game of Thrones</span>
         <span class="handle">@gameofthrones</span>
+      </div>
+      <div class="ledger-item">
+        <span class="house-name">A Knight of the Seven Kingdoms</span>
+        <span class="handle">@aknightofthe7kingdomshbo</span>
+      </div>
+      <div class="ledger-item">
+        <span class="house-name">Westerosies</span>
+        <span class="handle">@westerosies</span>
       </div>
     </div>
 

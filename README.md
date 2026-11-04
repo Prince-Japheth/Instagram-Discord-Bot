@@ -1,6 +1,6 @@
 # The Citadel Dispatch: Instagram Discord Notification Service
 
-An automated, self-hosted Instagram monitoring service built to stream updates from `@houseofthedragonhbo`, `@gameofthrones`, and any other public accounts directly into Discord channels with full multi-image carousel support.
+An automated, self-hosted Instagram monitoring service built to stream updates from `@houseofthedragonhbo`, `@gameofthrones`, `@aknightofthe7kingdomshbo`, `@westerosies`, and any other public accounts directly into Discord channels with full multi-image carousel support.
 
 Operates 100% free with no paid subscriptions (no MEE6, no Pingcord, no RSS.app limitations) and includes a built-in keep-alive server for permanent 24/7 uptime on Render's free tier.
 
@@ -102,14 +102,15 @@ Settings can be managed either via `config.yaml` or as environment variables:
 | `INSTAGRAM_HOURS` | `INSTAGRAM.HOURS` | Frequency of checks in hours | `1` |
 | `INSTAGRAM_SESSION_ID`| `INSTAGRAM.SESSION_ID` | (Optional) `sessionid` cookie from a burner IG account | `""` |
 
-### Tracking Additional Accounts
-To add more accounts to monitor, update the list under `USERNAMES` in `config.yaml`:
+### Tracked Accounts
+Configured under `USERNAMES` in `config.yaml`:
 ```yaml
 INSTAGRAM:
   USERNAMES:
-    - "houseofthedragonhbo"
     - "gameofthrones"
-    - "any_other_account"
+    - "houseofthedragonhbo"
+    - "aknightofthe7kingdomshbo"
+    - "westerosies"
 ```
 
 ---

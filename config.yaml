@@ -11,6 +11,8 @@ INSTAGRAM:
   USERNAMES:
     - "gameofthrones"
     - "houseofthedragonhbo"
+    - "aknightofthe7kingdomshbo"
+    - "westerosies"
   # How often the bot should check for new posts (in hours, e.g. 0.5 = 30 mins, 1 = 1 hour)
   HOURS: 1
   # (Optional) For high stability and zero rate-limiting, paste a sessionid cookie from a burner account

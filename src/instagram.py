@@ -27,7 +27,12 @@ CHECK_HOURS = float(os.getenv("INSTAGRAM_HOURS", INSTA_CFG.get("HOURS", 1)))
 SESSION_ID = os.getenv("INSTAGRAM_SESSION_ID", INSTA_CFG.get("SESSION_ID", ""))
 
 # Support both list USERNAMES and legacy single USERNAME
-RAW_USERS = INSTA_CFG.get("USERNAMES") or INSTA_CFG.get("USERNAME") or ["gameofthrones"]
+RAW_USERS = INSTA_CFG.get("USERNAMES") or INSTA_CFG.get("USERNAME") or [
+    "gameofthrones",
+    "houseofthedragonhbo",
+    "aknightofthe7kingdomshbo",
+    "westerosies",
+]
 if isinstance(RAW_USERS, str):
     TARGET_USERS = [u.strip() for u in RAW_USERS.split(",") if u.strip()]
 else:
@@ -361,12 +366,16 @@ def send_post_via_webhook(webhook_url: str, post: dict):
     avatars = {
         "gameofthrones": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Game_of_Thrones_2011_logo.svg/800px-Game_of_Thrones_2011_logo.svg.png",
         "houseofthedragonhbo": "https://upload.wikimedia.org/wikipedia/en/thumb/9/92/House_of_the_Dragon_title_card.png/800px-House_of_the_Dragon_title_card.png",
+        "aknightofthe7kingdomshbo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Game_of_Thrones_2011_logo.svg/800px-Game_of_Thrones_2011_logo.svg.png",
+        "westerosies": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Game_of_Thrones_2011_logo.svg/800px-Game_of_Thrones_2011_logo.svg.png",
     }
     avatar = avatars.get(username.lower(), "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/800px-Instagram_logo_2016.svg.png")
 
     display_names = {
         "gameofthrones": "Game of Thrones",
         "houseofthedragonhbo": "House of the Dragon",
+        "aknightofthe7kingdomshbo": "A Knight of the Seven Kingdoms",
+        "westerosies": "Westerosies",
     }
     display_name = display_names.get(username.lower(), f"@{username}")
 
