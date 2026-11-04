@@ -1,0 +1,17 @@
+DISCORD:
+  # Option 1: Use a Discord Bot Token (from Discord Developer Portal)
+  TOKEN: "Your discord bot token"
+  GUILD_NAME: "Your guild name"
+  # Option 2: Or simply use a Discord Webhook URL (no developer portal setup needed)
+  WEBHOOK_URL: ""
+
+INSTAGRAM:
+  CHANNEL: "Your Discord Channel Name"
+  # You can list one or multiple accounts here
+  USERNAMES:
+    - "gameofthrones"
+    - "houseofthedragonhbo"
+  # How often the bot should check for new posts (in hours, e.g. 0.5 = 30 mins, 1 = 1 hour)
+  HOURS: 1
+  # (Optional) For high stability and zero rate-limiting, paste a sessionid cookie from a burner account
+  SESSION_ID: ""
