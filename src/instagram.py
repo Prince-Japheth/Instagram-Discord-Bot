@@ -25,6 +25,10 @@ GUILD_NAME = os.getenv("DISCORD_GUILD_NAME", DISCORD_CFG.get("GUILD_NAME", ""))
 CHANNEL_NAME = os.getenv("INSTAGRAM_CHANNEL", INSTA_CFG.get("CHANNEL", ""))
 CHECK_HOURS = float(os.getenv("INSTAGRAM_HOURS", INSTA_CFG.get("HOURS", 1)))
 SESSION_ID = os.getenv("INSTAGRAM_SESSION_ID", INSTA_CFG.get("SESSION_ID", ""))
+USE_WEBHOOK_PROFILE = os.getenv(
+    "DISCORD_USE_WEBHOOK_PROFILE",
+    str(DISCORD_CFG.get("USE_WEBHOOK_PROFILE", "true")),
+).lower() in ("true", "1", "yes")
 
 # Support both list USERNAMES and legacy single USERNAME
 RAW_USERS = INSTA_CFG.get("USERNAMES") or INSTA_CFG.get("USERNAME") or [
@@ -363,14 +367,6 @@ def send_post_via_webhook(webhook_url: str, post: dict):
     total_slides = len(images)
     CHUNK_SIZE = 10
 
-    avatars = {
-        "gameofthrones": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Game_of_Thrones_2011_logo.svg/800px-Game_of_Thrones_2011_logo.svg.png",
-        "houseofthedragonhbo": "https://upload.wikimedia.org/wikipedia/en/thumb/9/92/House_of_the_Dragon_title_card.png/800px-House_of_the_Dragon_title_card.png",
-        "aknightofthe7kingdomshbo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Game_of_Thrones_2011_logo.svg/800px-Game_of_Thrones_2011_logo.svg.png",
-        "westerosies": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Game_of_Thrones_2011_logo.svg/800px-Game_of_Thrones_2011_logo.svg.png",
-    }
-    avatar = avatars.get(username.lower(), "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/800px-Instagram_logo_2016.svg.png")
-
     display_names = {
         "gameofthrones": "Game of Thrones",
         "houseofthedragonhbo": "House of the Dragon",
@@ -428,8 +424,6 @@ def send_post_via_webhook(webhook_url: str, post: dict):
             embeds_payload.append(embed)
 
         payload = {
-            "username": display_name,
-            "avatar_url": avatar,
             "embeds": embeds_payload if embeds_payload else [
                 {
                     "title": f"New Instagram post ({formatted_time})",
@@ -440,6 +434,11 @@ def send_post_via_webhook(webhook_url: str, post: dict):
                 }
             ]
         }
+
+        # If USE_WEBHOOK_PROFILE is disabled, override the sender name with the feed name.
+        # avatar_url is never sent so Discord always displays the webhook custom profile picture.
+        if not USE_WEBHOOK_PROFILE:
+            payload["username"] = display_name
 
         if files_payload:
             files_payload["payload_json"] = (None, json.dumps(payload), "application/json")

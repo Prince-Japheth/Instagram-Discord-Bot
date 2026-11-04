@@ -96,6 +96,7 @@ Settings can be managed either via `config.yaml` or as environment variables:
 | Environment Variable | `config.yaml` Key | Description | Default |
 | :--- | :--- | :--- | :--- |
 | `DISCORD_WEBHOOK_URL` | `DISCORD.WEBHOOK_URL` | Discord Webhook URL for posting updates | `""` |
+| `DISCORD_USE_WEBHOOK_PROFILE` | `DISCORD.USE_WEBHOOK_PROFILE` | Use webhook name and avatar configured in Discord | `true` |
 | `DISCORD_TOKEN` | `DISCORD.TOKEN` | Bot token (if using Bot Token mode instead of Webhook) | `""` |
 | `DISCORD_GUILD_NAME` | `DISCORD.GUILD_NAME` | Server name (for Bot Token mode) | `""` |
 | `INSTAGRAM_CHANNEL` | `INSTAGRAM.CHANNEL` | Channel name (for Bot Token mode) | `""` |

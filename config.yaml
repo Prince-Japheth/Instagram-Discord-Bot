@@ -4,6 +4,10 @@ DISCORD:
   GUILD_NAME: "Your guild name"
   # Option 2: Or simply use a Discord Webhook URL (no developer portal setup needed)
   WEBHOOK_URL: ""
+  # Use the webhook's custom profile picture and name as configured in Discord (e.g. Tyrion Lannister)
+  # When true (default): Keeps the webhook's own name and avatar as set in Discord settings.
+  # When false: Overrides the sender name to the Instagram account name (e.g. Game of Thrones) while keeping the webhook's avatar.
+  USE_WEBHOOK_PROFILE: true
 
 INSTAGRAM:
   CHANNEL: "Your Discord Channel Name"
