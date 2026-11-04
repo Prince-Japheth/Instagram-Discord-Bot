@@ -42,116 +42,212 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Instagram Discord Bot Dashboard</title>
+  <title>The Citadel Dispatch | Westeros Instagram Herald</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
+      font-family: 'EB Garamond', Georgia, serif;
+      background: #08090b;
+      background-image: 
+        radial-gradient(ellipse at 50% 20%, rgba(139, 30, 30, 0.12), transparent 70%),
+        radial-gradient(circle at 50% 100%, rgba(20, 24, 33, 0.8), #08090b 80%);
+      color: #d1c7b7;
       min-height: 100vh;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px;
     }
-    .card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 32px;
-      max-width: 460px;
+    .sigil-frame {
+      background: #0f1115;
+      border: 1px solid #3d3428;
+      outline: 1px solid #1f1b15;
+      outline-offset: -5px;
+      border-radius: 4px;
+      padding: 40px 32px;
+      max-width: 480px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 1px 1px rgba(197, 160, 89, 0.15);
+      position: relative;
     }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #064e3b;
-      color: #34d399;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 9999px;
-      margin-bottom: 16px;
+    .sigil-frame::before {
+      content: "";
+      position: absolute;
+      top: -1px; left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: #c5a059;
     }
-    .badge-dot {
-      width: 8px;
-      height: 8px;
-      background: #34d399;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #34d399;
+    .sigil-frame::after {
+      content: "";
+      position: absolute;
+      bottom: -1px; left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: #c5a059;
     }
-    h1 { margin: 0 0 10px; font-size: 1.5rem; color: #f8fafc; }
-    p { color: #94a3b8; font-size: 0.92rem; line-height: 1.5; margin: 0 0 20px; }
-    .feeds {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 0.88rem;
-      color: #cbd5e1;
-      margin-bottom: 20px;
+    .sub-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #9c8353;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 1.65rem;
+      letter-spacing: 0.08em;
+      color: #f1e9da;
+      margin: 0 0 12px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #6b5736, #c5a059, #6b5736, transparent);
+      margin: 20px 0;
+      border: 0;
+    }
+    p {
+      color: #a39785;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin: 0 0 24px;
+    }
+    .ledger {
+      background: #090a0d;
+      border: 1px solid #29241d;
+      border-radius: 2px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
       text-align: left;
     }
-    .feeds strong { color: #38bdf8; }
-    .btn {
-      width: 100%;
-      background: linear-gradient(135deg, #e1306c 0%, #f77737 100%);
-      color: white;
-      border: none;
-      padding: 14px 20px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: transform 0.1s, opacity 0.2s;
+    .ledger-header {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #8c764e;
+      margin-bottom: 8px;
     }
-    .btn:hover { opacity: 0.92; }
-    .btn:active { transform: scale(0.98); }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .status {
+    .ledger-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      font-size: 0.88rem;
+      color: #c7bcab;
+      border-bottom: 1px dashed #1c1a16;
+    }
+    .ledger-item:last-child { border-bottom: none; }
+    .house-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: #e5dcce;
+    }
+    .handle {
+      color: #bfa163;
+      font-family: monospace;
+      font-size: 0.82rem;
+    }
+    .btn-dispatch {
+      width: 100%;
+      background: #3b0c13;
+      border: 1px solid #8f2635;
+      color: #f3ebd9;
+      font-family: 'Cinzel', serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 15px 24px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .btn-dispatch:hover {
+      background: #54111c;
+      border-color: #c5a059;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(197, 160, 89, 0.25);
+    }
+    .btn-dispatch:active {
+      transform: translateY(1px);
+    }
+    .btn-dispatch:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      border-color: #443c32;
+    }
+    .status-chronicle {
       margin-top: 20px;
-      padding: 12px;
-      border-radius: 8px;
-      background: #0f172a;
-      border: 1px solid #334155;
+      padding: 14px 16px;
+      background: #07080a;
+      border: 1px solid #2a251e;
+      border-radius: 2px;
       font-size: 0.85rem;
-      color: #38bdf8;
+      color: #bfa163;
       text-align: left;
       white-space: pre-wrap;
       display: none;
-      line-height: 1.4;
+      line-height: 1.5;
+      font-family: 'EB Garamond', Georgia, serif;
     }
     .spinner {
       display: inline-block;
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: white;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(197, 160, 89, 0.25);
+      border-top-color: #c5a059;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.9s linear infinite;
       vertical-align: middle;
       margin-right: 8px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .seal-footer {
+      margin-top: 22px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #5c5244;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="badge"><span class="badge-dot"></span> 24/7 Service Online</div>
-    <h1>Instagram Bot</h1>
-    <p>Automated feed monitor running 24/7 on Render. Use the button below to trigger an immediate manual check.</p>
+  <div class="sigil-frame">
+    <div class="sub-title">A Song of Ice and Fire</div>
+    <h1>The Citadel Dispatch</h1>
+    <div class="divider"></div>
+    <p>Automated raven service watching the realm. Dispatching chronicles from Westeros and the House of the Dragon directly to your Discord Great Hall.</p>
     
-    <div class="feeds">
-      <strong>Tracked Feeds:</strong> @gameofthrones, @houseofthedragonhbo
+    <div class="ledger">
+      <div class="ledger-header">Feeds in Service</div>
+      <div class="ledger-item">
+        <span class="house-name">House of the Dragon</span>
+        <span class="handle">@houseofthedragonhbo</span>
+      </div>
+      <div class="ledger-item">
+        <span class="house-name">Game of Thrones</span>
+        <span class="handle">@gameofthrones</span>
+      </div>
     </div>
 
-    <button class="btn" id="btn" onclick="sendNow()">Send Latest Posts to Discord</button>
-    <div class="status" id="status"></div>
+    <button class="btn-dispatch" id="btn" onclick="sendNow()">Dispatch Ravens Now</button>
+    <div class="status-chronicle" id="status"></div>
+
+    <div class="seal-footer">The Citadel Herald &bull; Active 24/7</div>
   </div>
 
   <script>
@@ -159,9 +255,9 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       const btn = document.getElementById('btn');
       const status = document.getElementById('status');
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span>Fetching & sending to Discord...';
+      btn.innerHTML = '<span class="spinner"></span>Dispatching ravens...';
       status.style.display = 'block';
-      status.textContent = 'Contacting Instagram and packaging carousel slides...';
+      status.textContent = 'Gathering the latest chronicles from the realm...';
 
       try {
         const res = await fetch('/trigger', { method: 'POST' });
@@ -171,7 +267,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         status.textContent = 'Error: ' + err.message;
       } finally {
         btn.disabled = false;
-        btn.innerHTML = 'Send Latest Posts to Discord';
+        btn.innerHTML = 'Dispatch Ravens Now';
       }
     }
   </script>
