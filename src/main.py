@@ -42,7 +42,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Citadel Dispatch | Westeros Instagram Herald</title>
+  <title>Instagram Feed Monitor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -227,13 +227,13 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 </head>
 <body>
   <div class="sigil-frame">
-    <div class="sub-title">A Song of Ice and Fire</div>
-    <h1>The Citadel Dispatch</h1>
+    <div class="sub-title">Game of Thrones &bull; House of the Dragon</div>
+    <h1>Instagram Feed Monitor</h1>
     <div class="divider"></div>
-    <p>Automated raven service watching the realm. Dispatching chronicles from Westeros and the House of the Dragon directly to your Discord Great Hall.</p>
+    <p>Automated feed monitor broadcasting new posts to your Discord channel. Use the button below to perform a manual check.</p>
     
     <div class="ledger">
-      <div class="ledger-header">Feeds in Service</div>
+      <div class="ledger-header">Tracked Feeds</div>
       <div class="ledger-item">
         <span class="house-name">House of the Dragon</span>
         <span class="handle">@houseofthedragonhbo</span>
@@ -244,10 +244,10 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       </div>
     </div>
 
-    <button class="btn-dispatch" id="btn" onclick="sendNow()">Dispatch Ravens Now</button>
+    <button class="btn-dispatch" id="btn" onclick="sendNow()">Send Latest Posts to Discord</button>
     <div class="status-chronicle" id="status"></div>
 
-    <div class="seal-footer">The Citadel Herald &bull; Active 24/7</div>
+    <div class="seal-footer">Active 24/7</div>
   </div>
 
   <script>
@@ -255,9 +255,9 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       const btn = document.getElementById('btn');
       const status = document.getElementById('status');
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span>Dispatching ravens...';
+      btn.innerHTML = '<span class="spinner"></span>Fetching latest posts...';
       status.style.display = 'block';
-      status.textContent = 'Gathering the latest chronicles from the realm...';
+      status.textContent = 'Contacting Instagram feeds and packaging posts...';
 
       try {
         const res = await fetch('/trigger', { method: 'POST' });
@@ -267,7 +267,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         status.textContent = 'Error: ' + err.message;
       } finally {
         btn.disabled = false;
-        btn.innerHTML = 'Dispatch Ravens Now';
+        btn.innerHTML = 'Send Latest Posts to Discord';
       }
     }
   </script>
@@ -358,6 +358,24 @@ async def run_webhook_loop():
     last_shortcodes = {}
     loop_obj = asyncio.get_running_loop()
 
+    # Establish baseline on boot so we do not re-send existing posts on deploy or restart
+    print("[Webhook Mode] Establishing initial baseline for tracked feeds...")
+    for username in TARGET_USERS:
+        try:
+            post = await loop_obj.run_in_executor(
+                None, fetch_latest_post_sync, username, SESSION_ID
+            )
+            if post:
+                last_shortcodes[username] = post["shortcode"]
+                print(f"[Webhook Mode] Baseline recorded for @{username}: {post['shortcode']}")
+        except Exception as e:
+            print(f"[Webhook Mode] Could not establish baseline for @{username}: {e}")
+        await asyncio.sleep(2)
+
+    sleep_seconds = int(CHECK_HOURS * 3600)
+    print(f"[Webhook Mode] Baseline complete. Monitoring for NEW posts every {CHECK_HOURS} hour(s)...")
+    await asyncio.sleep(sleep_seconds)
+
     while True:
         for username in TARGET_USERS:
             try:
@@ -372,14 +390,13 @@ async def run_webhook_loop():
                             None, send_post_via_webhook, WEBHOOK_URL, post
                         )
                         last_shortcodes[username] = shortcode
-                        print(f"[Webhook Mode] Successfully delivered @{username} ({shortcode})")
+                        print(f"[Webhook Mode] Successfully delivered new post for @{username} ({shortcode})")
                     else:
                         print(f"[Webhook Mode] No new post for @{username} (already posted {shortcode})")
             except Exception as e:
                 print(f"[Webhook Mode] Error processing @{username}: {e}")
             await asyncio.sleep(4)
 
-        sleep_seconds = int(CHECK_HOURS * 3600)
         print(f"[Webhook Mode] Check complete. Next check in {CHECK_HOURS} hour(s)...")
         await asyncio.sleep(sleep_seconds)
 
