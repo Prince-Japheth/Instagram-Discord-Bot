@@ -35,12 +35,16 @@ RAW_USERS = INSTA_CFG.get("USERNAMES") or INSTA_CFG.get("USERNAME") or [
     "gameofthrones",
     "houseofthedragonhbo",
     "aknightofthe7kingdomshbo",
-    "westerosies",
+    "westerosies_",
 ]
 if isinstance(RAW_USERS, str):
-    TARGET_USERS = [u.strip() for u in RAW_USERS.split(",") if u.strip()]
+    parsed_users = [u.strip() for u in RAW_USERS.split(",") if u.strip()]
 else:
-    TARGET_USERS = list(RAW_USERS)
+    parsed_users = list(RAW_USERS)
+
+# Normalize common username aliases or typos
+ACCOUNT_ALIASES = {"westerosies": "westerosies_"}
+TARGET_USERS = [ACCOUNT_ALIASES.get(u.lower(), u) for u in parsed_users]
 
 # High-availability RSS-Bridge instances for anonymous public Instagram access
 BRIDGE_HOSTS = [
@@ -372,6 +376,7 @@ def send_post_via_webhook(webhook_url: str, post: dict):
         "houseofthedragonhbo": "House of the Dragon",
         "aknightofthe7kingdomshbo": "A Knight of the Seven Kingdoms",
         "westerosies": "Westerosies",
+        "westerosies_": "Westerosies",
     }
     display_name = display_names.get(username.lower(), f"@{username}")
 

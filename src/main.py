@@ -248,7 +248,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       </div>
       <div class="ledger-item">
         <span class="house-name">Westerosies</span>
-        <span class="handle">@westerosies</span>
+        <span class="handle">@westerosies_</span>
       </div>
     </div>
 
